@@ -128,16 +128,17 @@ export default {
   },
   generate: {
     routes: async function () {
-      var routes = []
-      var home = await axios.$get(`https://${serviceId}.microcms.io/api/v1/home/home`, {
+      var home = await axios.get(`https://${serviceId}.microcms.io/api/v1/home/home`, {
         headers: { 'X-API-KEY': apiKey }
       })
-      var menu = await axios.$get(`https://${serviceId}.microcms.io/api/v1/menu?fields=id,thumbnail,title,shopTitle`, {
+      var menu = await axios.get(`https://${serviceId}.microcms.io/api/v1/menu?fields=id,thumbnail,title,shopTitle`, {
         headers: { 'X-API-KEY': apiKey }
       })
       var shop = {}
       var articles = {}
-      menu = menu.contents
+      var routes = []
+      home = home.data
+      menu = menu.data.contents
       routes = [
         {
           route: '/',
@@ -148,10 +149,10 @@ export default {
         }
       ]
       for (let item of menu) {
-        shop = await axios.$get(`https://${serviceId}.microcms.io/api/v1/menu/${item.id}`, {
+        shop = await axios.get(`https://${serviceId}.microcms.io/api/v1/menu/${item.id}`, {
           headers: { 'X-API-KEY': apiKey }
         })
-        articles = await axios.$get(`https://${serviceId}.microcms.io/api/v1/${item.id}`, {
+        articles = await axios.get(`https://${serviceId}.microcms.io/api/v1/${item.id}`, {
           headers: { 'X-API-KEY': apiKey }
         })
         routes = [
@@ -161,8 +162,8 @@ export default {
             payload: {
               home,
               menu,
-              shop,
-              articles: articles.contents
+              shop: shop.data,
+              articles: articles.data.contents
             }
           }
         ]
