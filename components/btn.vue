@@ -1,6 +1,6 @@
 <template>
 <v-btn
-  :to="link"
+  :href="link"
   style="border-color:rgba(31,223,159,1);border-width:2px;"
   outlined
   large
