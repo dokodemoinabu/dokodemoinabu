@@ -96,6 +96,8 @@ export default {
   async asyncData ({ payload, app }) {
     if(payload) {
       return {
+        home: payload.home,
+        menu: payload.menu
       }
     }
     else if(process.env.NODE_ENV !== 'production') {

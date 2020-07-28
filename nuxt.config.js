@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+const axios = require("axios")
 require('dotenv').config()
 const serviceId = process.env.NUXT_ENV_SERVICE_ID
 const apiKey = process.env.NUXT_ENV_API_KEY
@@ -124,5 +125,49 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+  },
+  generate: {
+    routes: async function () {
+      var routes = []
+      var home = await axios.$get(`https://${serviceId}.microcms.io/api/v1/home/home`, {
+        headers: { 'X-API-KEY': apiKey }
+      })
+      var menu = await axios.$get(`https://${serviceId}.microcms.io/api/v1/menu?fields=id,thumbnail,title,shopTitle`, {
+        headers: { 'X-API-KEY': apiKey }
+      })
+      var shop = {}
+      var articles = {}
+      menu = menu.contents
+      routes = [
+        {
+          route: '/',
+          payload: {
+            home,
+            menu
+          }
+        }
+      ]
+      for (let item of menu) {
+        shop = await axios.$get(`https://${serviceId}.microcms.io/api/v1/menu/${item.id}`, {
+          headers: { 'X-API-KEY': apiKey }
+        })
+        articles = await axios.$get(`https://${serviceId}.microcms.io/api/v1/${item.id}`, {
+          headers: { 'X-API-KEY': apiKey }
+        })
+        routes = [
+          ...routes,
+          {
+            route: `/${item.id}`,
+            payload: {
+              home,
+              menu,
+              shop,
+              articles: articles.contents
+            }
+          }
+        ]
+      }
+      return routes
+    }
   }
 }
