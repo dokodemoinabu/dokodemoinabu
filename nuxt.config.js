@@ -1,23 +1,14 @@
 import colors from 'vuetify/es5/util/colors'
 const axios = require("axios")
 require('dotenv').config()
-const serviceId = process.env.NUXT_ENV_SERVICE_ID
-const apiKey = process.env.NUXT_ENV_API_KEY
-const siteName = process.env.NUXT_ENV_SITE_NAME
-const siteUrl = process.env.NUXT_ENV_SITE_URL
-const siteDesc = process.env.NUXT_ENV_SITE_DESC
-const siteKeywords = process.env.NUXT_ENV_SITE_KEYWORDS
+const {SERVICE_ID, API_KEY, SITE_TITLE, SITE_URL, SITE_DESC, SITE_KEYWORDS, TOP_TITLE, TOP_TEMPlATE, GTM_ID} = process.env
 
 export default {
-  env: {
-    serviceId: serviceId,
-    apiKey: apiKey,
-    siteName: siteName,
-    topTitle: process.env.NUXT_ENV_TOP_TITLE,
-    topTemplate: process.env.NUXT_ENV_TOP_TEMPLATE
-  },
   privateRuntimeConfig: {
-    apiKey: apiKey
+    API_KEY
+  },
+  env: {
+    SERVICE_ID, SITE_TITLE, TOP_TITLE, TOP_TEMPlATE
   },
   /*
   ** Nuxt rendering mode
@@ -38,7 +29,7 @@ export default {
       prefix: 'og: http://ogp.me/ns#',
       lang: 'ja'
     },
-    titleTemplate: `%s - ${siteName}`,
+    titleTemplate: `%s - ${SITE_TITLE}`,
     meta: [
       // 設定関連
       { charset: 'utf-8' },
@@ -46,16 +37,16 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     
       // SEO関連
-      { hid: 'description', name: 'description', content: siteDesc },
-      { hid: 'keywords', name: 'keywords', content: siteKeywords },
+      { hid: 'description', name: 'description', content: SITE_DESC },
+      { hid: 'keywords', name: 'keywords', content: SITE_KEYWORDS },
       
       // ogp関連
-      { hid: 'og:site_name', property: 'og:site_name', content: siteName },
+      { hid: 'og:site_name', property: 'og:site_name', content: SITE_TITLE },
       { hid: 'og:type', property: 'og:type', content: 'website' },
-      { hid: 'og:url', property: 'og:url', content: siteUrl },
-      { hid: 'og:title', property: 'og:title', content: siteName },
-      { hid: 'og:description', property: 'og:description', content: siteDesc },
-      { hid: 'og:image', property: 'og:image', content: `${siteUrl}ogp/home.jpg` },
+      { hid: 'og:url', property: 'og:url', content: SITE_URL },
+      { hid: 'og:title', property: 'og:title', content: SITE_TITLE },
+      { hid: 'og:description', property: 'og:description', content: SITE_DESC },
+      { hid: 'og:image', property: 'og:image', content: `${SITE_URL}ogp/home.jpg` },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
     link: [
@@ -84,6 +75,7 @@ export default {
   */
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxtjs/gtm'
   ],
   /*
   ** Nuxt.js modules
@@ -128,11 +120,11 @@ export default {
   },
   generate: {
     routes: async function () {
-      var home = await axios.get(`https://${serviceId}.microcms.io/api/v1/home/home`, {
-        headers: { 'X-API-KEY': apiKey }
+      var home = await axios.get(`https://${SERVICE_ID}.microcms.io/api/v1/home/home`, {
+        headers: { 'X-API-KEY': API_KEY }
       })
-      var menu = await axios.get(`https://${serviceId}.microcms.io/api/v1/menu?fields=id,thumbnail,title,shopTitle`, {
-        headers: { 'X-API-KEY': apiKey }
+      var menu = await axios.get(`https://${SERVICE_ID}.microcms.io/api/v1/menu?fields=id,thumbnail,title,shopTitle`, {
+        headers: { 'X-API-KEY': API_KEY }
       })
       var shop = {}
       var articles = {}
@@ -149,11 +141,11 @@ export default {
         }
       ]
       for (let item of menu) {
-        shop = await axios.get(`https://${serviceId}.microcms.io/api/v1/menu/${item.id}`, {
-          headers: { 'X-API-KEY': apiKey }
+        shop = await axios.get(`https://${SERVICE_ID}.microcms.io/api/v1/menu/${item.id}`, {
+          headers: { 'X-API-KEY': API_KEY }
         })
-        articles = await axios.get(`https://${serviceId}.microcms.io/api/v1/${item.id}`, {
-          headers: { 'X-API-KEY': apiKey }
+        articles = await axios.get(`https://${SERVICE_ID}.microcms.io/api/v1/${item.id}`, {
+          headers: { 'X-API-KEY': API_KEY }
         })
         routes = [
           ...routes,
@@ -170,5 +162,9 @@ export default {
       }
       return routes
     }
+  },
+  gtm: {
+    id: GTM_ID,
+    pageTracking: true,
   }
 }

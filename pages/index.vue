@@ -22,7 +22,7 @@
         >
           <div>
             <v-img
-              :src="imgSrc(home.logo) + '?fit=clip&h=192'"
+              :src="imgSrc(home.logo) + '?fit=clip&h=128'"
               alt=""
             ></v-img>
           </div>
@@ -31,9 +31,7 @@
       <v-row class="justify-center">
         <v-col
           cols="12"
-          sm="8"
-          md="6"
-          lg="5"
+          :class="($vuetify.breakpoint.xs)? $style.xs : $style.top"
           v-html="home.top"
         ></v-col>
       </v-row>
@@ -93,7 +91,7 @@ export default {
     Promotion,
     Title
   },
-  async asyncData ({ payload, app }) {
+  async asyncData ({ payload, app, $config }) {
     if(payload) {
       return {
         home: payload.home,
@@ -101,8 +99,8 @@ export default {
       }
     }
     else if(process.env.NODE_ENV !== 'production') {
-      var serviceId = process.env.serviceId
-      var apiKey = process.env.apiKey
+      var serviceId = process.env.SERVICE_ID
+      var apiKey = $config.API_KEY
       var home = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/home/home`, {
         headers: { 'X-API-KEY': apiKey }
       })
@@ -145,3 +143,15 @@ export default {
   }
 }
 </script>
+
+<style module>
+.xs {
+    font-size:.75rem;
+}
+.xs p {
+    margin-bottom:0;
+}
+.top p {
+    margin-bottom:0;
+}
+</style>

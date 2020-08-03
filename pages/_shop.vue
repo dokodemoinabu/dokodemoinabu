@@ -83,7 +83,7 @@ export default {
     Title,
     Article
   },
-  async asyncData ({ payload, app, params }) {
+  async asyncData ({ payload, app, $config, params }) {
     if(payload) {
       return {
         home: payload.home,
@@ -93,8 +93,8 @@ export default {
       }
     }
     else if(process.env.NODE_ENV !== 'production') {
-      var serviceId = process.env.serviceId
-      var apiKey = process.env.apiKey
+      var serviceId = process.env.SERVICE_ID
+      var apiKey = $config.API_KEY
       var home = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/home/home?fields=logo,footer,footerBgImg`, {
         headers: { 'X-API-KEY': apiKey }
       })
