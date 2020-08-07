@@ -64,11 +64,9 @@
 </template>
 
 <script>
-import Title from '~/components/title.vue';
 
 export default {
   components: {
-    Title
   },
   props: ['item'],
   computed: {

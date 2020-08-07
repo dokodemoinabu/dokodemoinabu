@@ -23,9 +23,10 @@
           {{ shop.shopTitle }}
         </h1>
         
-        <div class="py-4">
-          {{ shop.introduction }}
-        </div>
+        <div
+          class="py-4"
+          v-html="shop.introduction"
+        ></div>
         
         <div
           v-if="shop.btnLabel && shop.btnLink"

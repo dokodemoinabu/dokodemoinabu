@@ -5,10 +5,10 @@
 >
   <v-img
     :src="imgSrc(home.footerBgImg) + '?blend=59ffffff&blend-mode=normal'"
-    :height="($vuetify.breakpoint.xs)? '312' : 264"
-    class="d-flex align-end"
+    :height="($vuetify.breakpoint.xs)? '480' : 360"
+    class="d-flex align-stretch"
   >
-    <v-container class="pb-0">
+    <v-container class="pb-0 d-flex flex-column">
       <v-row
         class="py-4 justify-center"
         no-gutters
@@ -28,6 +28,7 @@
           </v-btn>
         </v-col>
       </v-row>
+      
       <v-row
         class="py-4 justify-center"
         no-gutters
@@ -50,6 +51,7 @@
           v-html="home.footer"
         ></v-col>
       </v-row>
+      
       <v-row
         class="mx-0 justify-center"
       >
