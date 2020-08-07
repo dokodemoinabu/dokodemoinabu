@@ -1,5 +1,6 @@
 <template>
 <v-row
+  v-if="item.contents1 || item.slider != '' || item.contents2 || item.embedded"
   class="justify-center pb-16 mb-sm-16"
 >
   <v-col

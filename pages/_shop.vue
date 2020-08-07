@@ -37,7 +37,9 @@
       </v-col>
     </v-row>
     <Promotion :item="shop" />
-    <v-row>
+    <v-row
+      v-if="articles != ''"
+    >
       <Title>商品紹介</Title>
       <v-col
         cols="12"
