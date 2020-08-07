@@ -6,9 +6,8 @@
     v-if="item.contents1"
     cols="12"
     sm="8"
-    md="6"
-    lg="5"
     v-html="item.contents1"
+    :class="($vuetify.breakpoint.xs)? $style.contents : undefined"
   ></v-col>
   
   <v-col
@@ -35,9 +34,8 @@
     v-if="item.contents2"
     cols="12"
     sm="8"
-    md="6"
-    lg="5"
     v-html="item.contents2"
+    :class="($vuetify.breakpoint.xs)? $style.contents : undefined"
   ></v-col>
   
   <v-col
@@ -103,3 +101,9 @@ export default {
   }
 }
 </script>
+
+<style module>
+.contents img {
+  width:296px;
+}
+</style>
